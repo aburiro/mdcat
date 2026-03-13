@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
+import 'result_screen.dart';
 
 // ─── Data Model ──────────────────────────────────────────────────────────────
 class QuizQuestion {
@@ -138,7 +139,10 @@ class _QuizScreenState extends State<QuizScreen> {
             child: const Text('Cancel'),
           ),
           ElevatedButton(
-            onPressed: () => Navigator.pop(context),
+            onPressed: () {
+              Navigator.pop(context);
+              Navigator.pushNamed(context, '/results');
+            },
             style: ElevatedButton.styleFrom(
               backgroundColor: const Color(0xFF1A3A6B),
               foregroundColor: Colors.white,

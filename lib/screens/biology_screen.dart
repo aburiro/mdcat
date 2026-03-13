@@ -1,5 +1,7 @@
 import 'dart:math' as math;
 import 'package:flutter/material.dart';
+import 'quiz_screen.dart';
+import 'result_screen.dart';
 
 // ─── Data Model ──────────────────────────────────────────────────────────────
 enum ChapterStatus { completed, inProgress, notStarted }
@@ -244,7 +246,7 @@ class _BiologyScreenState extends State<BiologyScreen> {
   // ─── Mock Button ───────────────────────────────────────────────────────────
   Widget _buildMockButton() {
     return GestureDetector(
-      onTap: () {},
+      onTap: () => Navigator.pushNamed(context, '/quiz'),
       child: Container(
         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
         decoration: BoxDecoration(
@@ -408,7 +410,7 @@ class _ChapterCard extends StatelessWidget {
     switch (chapter.status) {
       case ChapterStatus.completed:
         return ElevatedButton(
-          onPressed: () {},
+          onPressed: () => Navigator.pushNamed(context, '/results'),
           style: ElevatedButton.styleFrom(
             backgroundColor: const Color(0xFF2E8B57),
             foregroundColor: Colors.white,
@@ -426,7 +428,7 @@ class _ChapterCard extends StatelessWidget {
 
       case ChapterStatus.inProgress:
         return ElevatedButton(
-          onPressed: () {},
+          onPressed: () => Navigator.pushNamed(context, '/quiz'),
           style: ElevatedButton.styleFrom(
             backgroundColor: const Color(0xFFE87722),
             foregroundColor: Colors.white,
@@ -444,7 +446,7 @@ class _ChapterCard extends StatelessWidget {
 
       case ChapterStatus.notStarted:
         return OutlinedButton.icon(
-          onPressed: () {},
+          onPressed: () => Navigator.pushNamed(context, '/quiz'),
           icon: const Icon(Icons.arrow_forward_ios, size: 12),
           label: const Text(
             'Start',

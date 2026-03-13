@@ -1,5 +1,7 @@
 import 'dart:math' as math;
 import 'package:flutter/material.dart';
+import 'biology_screen.dart';
+import 'quiz_screen.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
@@ -14,15 +16,10 @@ class HomeScreen extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              // Top Bar
               _buildTopBar(),
               const SizedBox(height: 16),
-
-              // Progress Card
-              _buildProgressCard(),
+              _buildProgressCard(context),
               const SizedBox(height: 20),
-
-              // Subject Grid Label
               const Text(
                 'Subject Grid',
                 style: TextStyle(
@@ -32,13 +29,9 @@ class HomeScreen extends StatelessWidget {
                 ),
               ),
               const SizedBox(height: 12),
-
-              // Subject Grid
-              _buildSubjectGrid(),
+              _buildSubjectGrid(context),
               const SizedBox(height: 20),
-
-              // Quick Quiz Button
-              _buildQuizButton(),
+              _buildQuizButton(context),
               const SizedBox(height: 20),
             ],
           ),
@@ -47,7 +40,6 @@ class HomeScreen extends StatelessWidget {
     );
   }
 
-  // ─── Top Bar ───────────────────────────────────────────────────────────────
   Widget _buildTopBar() {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -85,8 +77,7 @@ class HomeScreen extends StatelessWidget {
     );
   }
 
-  // ─── Progress Card ─────────────────────────────────────────────────────────
-  Widget _buildProgressCard() {
+  Widget _buildProgressCard(BuildContext context) {
     return Container(
       width: double.infinity,
       padding: const EdgeInsets.symmetric(vertical: 24, horizontal: 20),
@@ -107,7 +98,6 @@ class HomeScreen extends StatelessWidget {
       ),
       child: Column(
         children: [
-          // Circular Progress
           SizedBox(
             width: 160,
             height: 160,
@@ -140,8 +130,6 @@ class HomeScreen extends StatelessWidget {
             ),
           ),
           const SizedBox(height: 16),
-
-          // Track message
           const Text(
             'You are on track for the MDCAT 2026!',
             style: TextStyle(
@@ -152,12 +140,12 @@ class HomeScreen extends StatelessWidget {
             textAlign: TextAlign.center,
           ),
           const SizedBox(height: 16),
-
-          // Resume Button
           SizedBox(
             width: double.infinity,
             child: ElevatedButton(
-              onPressed: () {},
+              onPressed: () {
+                Navigator.pushNamed(context, '/subject/biology');
+              },
               style: ElevatedButton.styleFrom(
                 backgroundColor: const Color(0xFFE87722),
                 foregroundColor: Colors.white,
@@ -185,11 +173,11 @@ class HomeScreen extends StatelessWidget {
     );
   }
 
-  // ─── Subject Grid ──────────────────────────────────────────────────────────
-  Widget _buildSubjectGrid() {
+  Widget _buildSubjectGrid(BuildContext context) {
+    void openBiology() => Navigator.pushNamed(context, '/subject/biology');
+
     return Column(
       children: [
-        // Row 1: Biology + Chemistry
         Row(
           children: [
             Expanded(
@@ -199,6 +187,7 @@ class HomeScreen extends StatelessWidget {
                 progress: 0.60,
                 color: const Color(0xFF2E8B57),
                 iconEmoji: '🧬',
+                onTap: openBiology,
               ),
             ),
             const SizedBox(width: 12),
@@ -209,12 +198,12 @@ class HomeScreen extends StatelessWidget {
                 progress: 0.40,
                 color: const Color(0xFF1E6BB8),
                 iconEmoji: '🧪',
+                onTap: openBiology,
               ),
             ),
           ],
         ),
         const SizedBox(height: 12),
-        // Row 2: Physics + English + Logical Reasoning
         Row(
           children: [
             Expanded(
@@ -223,7 +212,8 @@ class HomeScreen extends StatelessWidget {
                 icon: Icons.atm,
                 progress: 0.30,
                 color: const Color(0xFF2E5CA8),
-                iconEmoji: '⚛️',
+                iconEmoji: '⚙️',
+                onTap: openBiology,
               ),
             ),
             const SizedBox(width: 10),
@@ -234,6 +224,7 @@ class HomeScreen extends StatelessWidget {
                 progress: 0.80,
                 color: const Color(0xFF8B1A1A),
                 iconEmoji: '📖',
+                onTap: openBiology,
               ),
             ),
             const SizedBox(width: 10),
@@ -245,6 +236,7 @@ class HomeScreen extends StatelessWidget {
                 color: const Color(0xFF5B2D8E),
                 iconEmoji: '🧠',
                 smallTitle: true,
+                onTap: openBiology,
               ),
             ),
           ],
@@ -253,8 +245,7 @@ class HomeScreen extends StatelessWidget {
     );
   }
 
-  // ─── Quick Quiz Button ─────────────────────────────────────────────────────
-  Widget _buildQuizButton() {
+  Widget _buildQuizButton(BuildContext context) {
     return Container(
       width: double.infinity,
       decoration: BoxDecoration(
@@ -276,7 +267,7 @@ class HomeScreen extends StatelessWidget {
         color: Colors.transparent,
         child: InkWell(
           borderRadius: BorderRadius.circular(14),
-          onTap: () {},
+          onTap: () => Navigator.pushNamed(context, '/quiz'),
           child: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
             child: Row(
@@ -289,7 +280,7 @@ class HomeScreen extends StatelessWidget {
                     borderRadius: BorderRadius.circular(10),
                   ),
                   child: const Center(
-                    child: Text('📋', style: TextStyle(fontSize: 20)),
+                    child: Text('📝', style: TextStyle(fontSize: 20)),
                   ),
                 ),
                 const SizedBox(width: 14),
@@ -317,7 +308,6 @@ class HomeScreen extends StatelessWidget {
   }
 }
 
-// ─── Subject Card Widget ────────────────────────────────────────────────────
 class _SubjectCard extends StatelessWidget {
   final String title;
   final IconData icon;
@@ -325,6 +315,7 @@ class _SubjectCard extends StatelessWidget {
   final Color color;
   final String iconEmoji;
   final bool smallTitle;
+  final VoidCallback? onTap;
 
   const _SubjectCard({
     required this.title,
@@ -333,72 +324,79 @@ class _SubjectCard extends StatelessWidget {
     required this.color,
     required this.iconEmoji,
     this.smallTitle = false,
+    this.onTap,
   });
 
   @override
   Widget build(BuildContext context) {
     final percent = (progress * 100).toInt();
 
-    return Container(
-      padding: const EdgeInsets.all(12),
-      decoration: BoxDecoration(
-        gradient: LinearGradient(
-          colors: [color, color.withOpacity(0.75)],
-          begin: Alignment.topLeft,
-          end: Alignment.bottomRight,
-        ),
+    return Material(
+      color: Colors.transparent,
+      child: InkWell(
         borderRadius: BorderRadius.circular(16),
-        boxShadow: [
-          BoxShadow(
-            color: color.withOpacity(0.3),
-            blurRadius: 8,
-            offset: const Offset(0, 3),
-          ),
-        ],
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(iconEmoji, style: const TextStyle(fontSize: 26)),
-          const SizedBox(height: 8),
-          Text(
-            title,
-            style: TextStyle(
-              color: Colors.white,
-              fontWeight: FontWeight.w700,
-              fontSize: smallTitle ? 11 : 14,
+        onTap: onTap,
+        child: Container(
+          padding: const EdgeInsets.all(12),
+          decoration: BoxDecoration(
+            gradient: LinearGradient(
+              colors: [color, color.withOpacity(0.75)],
+              begin: Alignment.topLeft,
+              end: Alignment.bottomRight,
             ),
-            maxLines: 2,
-            overflow: TextOverflow.ellipsis,
-          ),
-          const SizedBox(height: 6),
-          Text(
-            '$percent%',
-            style: const TextStyle(
-              color: Colors.white,
-              fontWeight: FontWeight.w800,
-              fontSize: 16,
-            ),
-          ),
-          const SizedBox(height: 6),
-          ClipRRect(
-            borderRadius: BorderRadius.circular(4),
-            child: LinearProgressIndicator(
-              value: progress,
-              backgroundColor: Colors.white.withOpacity(0.25),
-              valueColor: const AlwaysStoppedAnimation<Color>(
-                Color(0xFFE8A020),
+            borderRadius: BorderRadius.circular(16),
+            boxShadow: [
+              BoxShadow(
+                color: color.withOpacity(0.3),
+                blurRadius: 8,
+                offset: const Offset(0, 3),
               ),
-              minHeight: 5,
-            ),
+            ],
           ),
-        ],
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(iconEmoji, style: const TextStyle(fontSize: 26)),
+              const SizedBox(height: 8),
+              Text(
+                title,
+                style: TextStyle(
+                  color: Colors.white,
+                  fontWeight: FontWeight.w700,
+                  fontSize: smallTitle ? 11 : 14,
+                ),
+                maxLines: 2,
+                overflow: TextOverflow.ellipsis,
+              ),
+              const SizedBox(height: 6),
+              Text(
+                '$percent%',
+                style: const TextStyle(
+                  color: Colors.white,
+                  fontWeight: FontWeight.w800,
+                  fontSize: 16,
+                ),
+              ),
+              const SizedBox(height: 6),
+              ClipRRect(
+                borderRadius: BorderRadius.circular(4),
+                child: LinearProgressIndicator(
+                  value: progress,
+                  backgroundColor: Colors.white.withOpacity(0.25),
+                  valueColor: const AlwaysStoppedAnimation<Color>(
+                    Color(0xFFE8A020),
+                  ),
+                  minHeight: 5,
+                ),
+              ),
+            ],
+          ),
+        ),
       ),
     );
   }
 }
 
-// ─── Circular Progress Painter ───────────────────────────────────────────────
 class _CircularProgressPainter extends CustomPainter {
   final double progress;
 
@@ -411,16 +409,13 @@ class _CircularProgressPainter extends CustomPainter {
     const startAngle = -math.pi / 2;
     const strokeWidth = 14.0;
 
-    // Background track
     final bgPaint = Paint()
       ..color = Colors.white.withOpacity(0.2)
       ..style = PaintingStyle.stroke
       ..strokeWidth = strokeWidth
       ..strokeCap = StrokeCap.round;
-
     canvas.drawCircle(center, radius, bgPaint);
 
-    // Blue completed segment
     final bluePaint = Paint()
       ..shader = const LinearGradient(
         colors: [Color(0xFF4FC3F7), Color(0xFF1565C0)],
@@ -428,26 +423,23 @@ class _CircularProgressPainter extends CustomPainter {
       ..style = PaintingStyle.stroke
       ..strokeWidth = strokeWidth
       ..strokeCap = StrokeCap.round;
-
     canvas.drawArc(
       Rect.fromCircle(center: center, radius: radius),
       startAngle,
-      2 * math.pi * progress * 0.7, // blue portion ~70% of progress
+      2 * math.pi * progress * 0.7,
       false,
       bluePaint,
     );
 
-    // Orange remaining segment
     final orangePaint = Paint()
       ..color = const Color(0xFFE87722)
       ..style = PaintingStyle.stroke
       ..strokeWidth = strokeWidth
       ..strokeCap = StrokeCap.round;
-
     canvas.drawArc(
       Rect.fromCircle(center: center, radius: radius),
       startAngle + 2 * math.pi * progress * 0.7,
-      2 * math.pi * progress * 0.3, // orange portion ~30% of progress
+      2 * math.pi * progress * 0.3,
       false,
       orangePaint,
     );
