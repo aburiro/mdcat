@@ -1,28 +1,6 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 
-void main() {
-  runApp(const MDCATApp());
-}
-
-class MDCATApp extends StatelessWidget {
-  const MDCATApp({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'MDCAT Prep',
-      debugShowCheckedModeBanner: false,
-      theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: const Color(0xFF1A3A6B)),
-        useMaterial3: true,
-        fontFamily: 'Roboto',
-      ),
-      home: const QuizScreen(),
-    );
-  }
-}
-
 // ─── Data Model ──────────────────────────────────────────────────────────────
 class QuizQuestion {
   final String question;
